@@ -8,17 +8,17 @@
 
 :root {
   /* Colors */
-  --gold: #c9a84c;
-  --gold-light: #e8d5a3;
-  --gold-dark: #8b6914;
-  --navy: #0e1628;
-  --navy-mid: #1a2540;
-  --cream: #faf7f2;
-  --cream-dark: #f0eae0;
+  --primary: #1a3a8f; /* deep blue — main brand color */
+  --primary-mid: #0d2266; /* darker blue — for header/footer */
+  --primary-light: #2e5fd9; /* bright blue — hover states */
+  --accent: #d91c1c; /* bold red — CTAs and highlights */
+  --accent-light: #f24444; /* lighter red — hover on red buttons */
+  --cream: #f5f7ff; /* near-white with blue tint — backgrounds */
+  --cream-dark: #e3e8f7; /* slightly deeper — card borders, dividers */
   --white: #ffffff;
-  --text-dark: #0e1628;
-  --text-mid: #4a5568;
-  --text-light: #8a96a8;
+  --text-dark: #0a1540; /* very dark navy — body text */
+  --text-mid: #4a5578;
+  --text-light: #8a96b8;
 
   /* Typography */
   --font-serif: "Cormorant Garamond", Georgia, serif;
@@ -83,3 +83,471 @@ ol {
 }
 /* margin-inline: auto is the modern way to write
    margin-left: auto; margin-right: auto; */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 70px;
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(14, 22, 40, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(42, 90, 210, 0.2);
+  transition: background var(--transition);
+}
+/* position: fixed + z-index: 1000 keeps it above all
+   other content while scrolling.
+   backdrop-filter: blur gives the frosted-glass effect. */
+
+/* The logo */
+.logo {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+}
+
+.logo span {
+  color: var(--white);
+  font-weight: 300;
+}
+
+/* Nav links — horizontal row on desktop */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.nav-links a {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color var(--transition);
+}
+
+.nav-links a:hover {
+  color: var(--gold);
+}
+
+/* The "Book Now" button in the nav */
+.nav-cta {
+  background: var(--gold) !important;
+  color: var(--navy) !important;
+  padding: 8px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 500 !important;
+  transition: background var(--transition) !important;
+}
+
+.nav-cta:hover {
+  background: var(--gold-light) !important;
+}
+
+/* ── HAMBURGER (mobile only) ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+/* Hidden on desktop. JS toggles it open/closed on mobile. */
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition:
+    transform var(--transition),
+    opacity var(--transition);
+}
+
+/* Animate hamburger → X when open class is added by JS */
+.hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── MOBILE MENU ── */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  background: var(--navy);
+  padding: 2rem 5%;
+  border-bottom: 1px solid rgba(42, 90, 210, 0.15);
+  flex-direction: column;
+  gap: 0;
+  z-index: 999;
+}
+
+.mobile-menu.open {
+  display: flex;
+}
+
+.mobile-link {
+  display: block;
+  padding: 1rem 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  transition: color var(--transition);
+}
+
+.mobile-link:hover {
+  color: var(--gold);
+}
+
+.mobile-cta {
+  margin-top: 1rem;
+  background: var(--gold);
+  color: var(--navy) !important;
+  text-align: center;
+  border-radius: var(--radius-sm);
+  border-bottom: none !important;
+  font-weight: 500;
+}
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}
+/* =============================================
+   HERO SECTION
+   Full-viewport-height opening section.
+   Deep blue background with layered decorative
+   elements for depth and premium feel.
+   ============================================= */
+
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    var(--primary-mid) 0%,
+    var(--primary) 60%,
+    #1e3a9e 100%
+  );
+  display: flex;
+  align-items: center;
+  padding: 120px 5% 80px;
+  position: relative;
+  overflow: hidden;
+}
+/* min-height: 100vh means "at least the full screen height"
+   padding-top: 120px pushes content below the fixed 70px navbar
+   overflow: hidden clips the decorative orbs at the edges */
+
+/* ── Decorative background orbs ── */
+.hero-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+/* pointer-events: none means clicks pass straight through them */
+
+.hero-bg-orb--1 {
+  width: 600px;
+  height: 600px;
+  top: -15%;
+  right: -10%;
+  background: radial-gradient(
+    circle,
+    rgba(42, 90, 210, 0.25) 0%,
+    transparent 70%
+  );
+}
+
+.hero-bg-orb--2 {
+  width: 400px;
+  height: 400px;
+  bottom: -10%;
+  left: -5%;
+  background: radial-gradient(
+    circle,
+    rgba(217, 28, 28, 0.1) 0%,
+    transparent 70%
+  );
+}
+
+/* Thin horizontal decorative line */
+.hero-bg-line {
+  position: absolute;
+  bottom: 18%;
+  left: 5%;
+  width: 250px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* ── Two-column grid layout inside hero ── */
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  width: 100%;
+}
+/* grid-template-columns: 1fr 1fr = two equal columns
+   We'll collapse this to one column on mobile later */
+
+/* ── Left column: text content ── */
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+/* The ::before pseudo-element adds a red line
+   before the eyebrow text — no extra HTML needed */
+
+.hero-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+/* clamp(min, preferred, max) = responsive font size
+   that scales with the viewport but never goes below
+   2.8rem or above 4.2rem */
+
+.hero-heading em {
+  font-style: italic;
+  color: var(--accent);
+  display: block;
+}
+
+.hero-desc {
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.85;
+  max-width: 430px;
+  margin-bottom: 2.5rem;
+}
+
+/* ── CTA buttons ── */
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+/* Base button styles — shared by ALL buttons sitewide */
+.btn {
+  display: inline-block;
+  padding: 13px 30px;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    transform var(--transition);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+/* Subtle lift effect on hover — works on all button variants */
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--white);
+  border-color: var(--accent);
+}
+
+.btn--primary:hover {
+  background: var(--accent-light);
+  border-color: var(--accent-light);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.btn--ghost:hover {
+  border-color: var(--white);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--primary);
+  border-color: var(--cream-dark);
+}
+
+.btn--outline:hover {
+  border-color: var(--primary);
+}
+
+.btn--full {
+  width: 100%;
+  text-align: center;
+}
+
+/* ── Trust signals row ── */
+.hero-trust {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 300;
+}
+
+.trust-icon {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── Right column: stats grid ── */
+.hero-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  transition: background var(--transition);
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.stat-num {
+  font-family: var(--font-serif);
+  font-size: 2.4rem;
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1;
+  display: block;
+}
+
+.stat-symbol {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--accent);
+  margin-left: 2px;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 6px;
+}
+
+/* ── Promo badge ── */
+.hero-promo-badge {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(217, 28, 28, 0.1);
+  border: 1px solid rgba(217, 28, 28, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1.2rem 1.5rem;
+}
+
+.promo-icon {
+  width: 42px;
+  height: 42px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.hero-promo-badge p {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+.hero-promo-badge strong {
+  color: var(--white);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 2px;
+}
