@@ -37,7 +37,7 @@ function Navbar() {
         <a href="#home" className="text-2xl font-bold tracking-wide">
           {/* Two spans let us color each word differently */}
           <span className="text-red-500">Laundry</span>
-          <span className="text-white font-light">Mart</span>
+          <span className="text-white font-light">Mat</span>
         </a>
 
         {/* ── DESKTOP NAV LINKS ── */}
