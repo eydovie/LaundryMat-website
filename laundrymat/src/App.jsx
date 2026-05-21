@@ -7,7 +7,7 @@ import Testimonials  from './components/Testimonials'
 import Booking       from './components/Booking'
 import Footer        from './components/Footer'
 import ThemeSwitcher from './components/ThemeSwitcher'
-import { useTheme }  from '../context/useTheme'
+import { useTheme }  from './context/useTheme'
 
 function App() {
   const { theme } = useTheme()

@@ -2,11 +2,13 @@
 // useState lets us track things that change — like whether
 // the mobile menu is open or closed.
 import { useState } from "react";
+import { useTheme } from "../context/useTheme";
 
 function Navbar() {
   // isMenuOpen is our state variable — starts as false (menu closed).
   // setIsMenuOpen is the function we call to change it.
   // Think of it like: const isMenuOpen = false, but React-powered.
+  const { theme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // This function toggles the menu open/closed when hamburger is clicked.
@@ -30,7 +32,13 @@ function Navbar() {
     // <header> is fixed to the top — stays visible while scrolling.
     // z-50 keeps it above all other content.
     // backdrop-blur-md gives the frosted glass effect.
-    <header className="fixed top-0 left-0 right-0 z-50 bg-blue-900/95 backdrop-blur-md border-b border-blue-700/30">
+    <header
+      style={{
+        background: `${theme.bg}F5`,
+        borderBottom: `1px solid ${theme.border}`,
+      }}
+      className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md"
+    >
       <div className="max-w-6xl mx-auto px-6 h-[70px] flex items-center justify-between">
         {/* ── LOGO ── */}
         {/* Clicking scrolls back to top of page */}
@@ -89,14 +97,24 @@ function Navbar() {
       {/* Only renders in the DOM when isMenuOpen is true.
           The && operator means: "if isMenuOpen, show this" */}
       {isMenuOpen && (
-        <div className="md:hidden bg-blue-900 border-t border-blue-700/30 px-6 py-4">
+        <div
+          style={{
+            background: theme.bg,
+            borderTop: `1px solid ${theme.border}`,
+          }}
+          className="md:hidden px-6 py-4"
+        >
           <nav className="flex flex-col">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={closeMenu}
-                className="py-3 text-sm tracking-widest uppercase text-white/70 hover:text-white border-b border-white/10 transition-colors duration-200"
+                style={{
+                  color: theme.textSub,
+                  borderBottom: `1px solid ${theme.border}`,
+                }}
+                className="py-3 text-sm tracking-widest uppercase block transition-colors duration-200"
               >
                 {link.label}
               </a>
