@@ -1,21 +1,19 @@
-// App.jsx is the root of the entire application.
-// It imports every section component and renders them
-// top to bottom — exactly the order they appear on the page.
-
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import Services from './components/Services'
-import HowItWorks from './components/HowItWorks'
-import Pricing from './components/Pricing'
-import Testimonials from './components/Testimonials'
-import Booking from './components/Booking'
-import Footer from './components/Footer'
+import Navbar        from './components/Navbar'
+import Hero          from './components/Hero'
+import Services      from './components/Services'
+import HowItWorks    from './components/HowItWorks'
+import Pricing       from './components/Pricing'
+import Testimonials  from './components/Testimonials'
+import Booking       from './components/Booking'
+import Footer        from './components/Footer'
+import ThemeSwitcher from './components/ThemeSwitcher'
+import { useTheme }  from '../context/useTheme'
 
 function App() {
+  const { theme } = useTheme()
+
   return (
-    // The outer div is the page wrapper.
-    // bg-slate-50 gives the whole page a very light background.
-    <div className="bg-slate-50">
+    <div style={{ background: theme.bg, minHeight: '100vh' }}>
       <Navbar />
       <main>
         <Hero />
@@ -26,6 +24,8 @@ function App() {
         <Booking />
       </main>
       <Footer />
+      {/* Floating theme switcher — always on top */}
+      <ThemeSwitcher />
     </div>
   )
 }

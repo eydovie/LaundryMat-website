@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Shield, Clock3, Star } from "lucide-react";
+import { useTheme } from "../context/useTheme";
 
 // Animation variants — defined outside component so they don't
 // re-create on every render. These drive the staggered entrance.
@@ -29,10 +30,12 @@ const stats = [
 ];
 
 function Hero() {
+  const { theme } = useTheme();
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col overflow-hidden bg-[#060B18]"
+      className="relative min-h-screen flex flex-col overflow-hidden"
+      style={{ background: theme.bg }}
     >
       {/* ══════════════════════════════════════
           LAYERED BACKGROUND — multiple gradients
@@ -57,8 +60,8 @@ function Hero() {
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none opacity-[0.03]"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(${theme.gridColor} 1px, transparent 1px),
+                    linear-gradient(90deg, ${theme.gridColor} 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
         }}
       />
