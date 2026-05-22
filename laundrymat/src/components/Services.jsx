@@ -7,6 +7,7 @@ import {
   Zap,
   ArrowRight,
 } from "lucide-react";
+import { useTheme } from "../context/useTheme";
 
 const containerVariants = {
   hidden: {},
@@ -71,10 +72,12 @@ const services = [
 ];
 
 function Services() {
+  const { theme } = useTheme();
   return (
     <section
       id="services"
-      className="relative bg-[#060B18] py-32 overflow-hidden"
+      className="relative py-32 overflow-hidden"
+      style={{ background: theme.bg }}
     >
       {/* ── Background glows ── */}
       <div
@@ -91,8 +94,8 @@ function Services() {
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none opacity-[0.02]"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(${theme.gridColor} 1px, transparent 1px),
+                    linear-gradient(90deg, ${theme.gridColor} 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
         }}
       />
@@ -119,9 +122,7 @@ function Services() {
               Five-Star Services,{" "}
               <span
                 className="text-transparent bg-clip-text"
-                style={{
-                  backgroundImage: "linear-gradient(135deg, #3B82F6, #DC2626)",
-                }}
+                style={{ backgroundImage: theme.gradientText }}
               >
                 Tailored to You
               </span>
@@ -133,7 +134,12 @@ function Services() {
           </div>
 
           {/* Decorative divider line */}
-          <div className="mt-8 h-px bg-gradient-to-r from-blue-500/40 via-red-500/30 to-transparent" />
+          <div
+            className="mt-8 h-px"
+            style={{
+              background: `linear-gradient(90deg, ${theme.primary}60, ${theme.accent}40, transparent)`,
+            }}
+          />
         </motion.div>
 
         {/* ── Services grid ── */}
@@ -192,20 +198,17 @@ function Services() {
 // Props let each card receive its own data.
 function ServiceCard({ service }) {
   const Icon = service.icon;
+  const { theme } = useTheme();
 
   return (
     <motion.article
       variants={cardVariants}
-      className={`group relative flex flex-col gap-5 p-8 rounded-2xl border transition-all duration-300 cursor-default
-        hover:-translate-y-1
-        ${
-          service.featured
-            ? // Featured card: red glow treatment
-              "bg-gradient-to-br from-red-950/60 to-red-900/20 border-red-500/30 hover:border-red-400/50 hover:shadow-[0_20px_60px_rgba(220,38,38,0.2)]"
-            : // Regular card: blue-glass treatment
-              "bg-white/[0.03] border-white/8 hover:border-white/20 hover:bg-white/[0.06] hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
-        }
-      `}
+      style={{
+        background: service.featured ? `${theme.accent}15` : theme.bgCard,
+        border: `1px solid ${service.featured ? theme.accent + "40" : theme.border}`,
+        color: theme.text,
+      }}
+      className="group relative flex flex-col gap-5 p-8 rounded-2xl transition-all duration-300 cursor-default hover:-translate-y-1"
     >
       {/* Optional tag badge */}
       {service.tag && (
@@ -233,14 +236,22 @@ function ServiceCard({ service }) {
 
       {/* Text */}
       <div className="flex flex-col gap-2 flex-1">
-        <h3 className="text-white font-bold text-xl">{service.title}</h3>
-        <p className="text-blue-100/40 font-light leading-relaxed text-sm flex-1">
+        <h3 style={{ color: theme.text }} className="font-bold text-xl">
+          {service.title}
+        </h3>
+        <p
+          style={{ color: theme.textMuted }}
+          className="font-light leading-relaxed text-sm flex-1"
+        >
           {service.description}
         </p>
       </div>
 
       {/* Footer: price + arrow */}
-      <div className="flex items-center justify-between pt-4 border-t border-white/5">
+      <div
+        className="flex items-center justify-between pt-4 border-t border-white/5"
+        style={{ borderTop: `1px solid ${theme.border}` }}
+      >
         <span
           className={`text-sm font-semibold ${service.featured ? "text-red-400" : "text-blue-400"}`}
         >
