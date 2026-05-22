@@ -15,6 +15,7 @@ import {
   Star,
   Truck,
 } from "lucide-react";
+import { useTheme } from "../context/useTheme";
 
 // Form fields defined as data — cleaner than repeating
 // JSX for every single input manually
@@ -72,6 +73,7 @@ function Booking() {
   const [errors, setErrors] = useState({});
   // status: 'idle' | 'loading' | 'success'
   const [status, setStatus] = useState("idle");
+  const { theme } = useTheme();
 
   // Generic change handler — works for ALL inputs and selects.
   // e.target.name matches the name="" attribute on each field.
@@ -131,7 +133,8 @@ function Booking() {
   return (
     <section
       id="booking"
-      className="relative bg-[#060B18] py-32 overflow-hidden"
+      className="relative py-32 overflow-hidden"
+      style={{ background: theme.bg }}
     >
       {/* ── Background ── */}
       <div
@@ -311,12 +314,21 @@ function Booking() {
                   exit={{ opacity: 0 }}
                   onSubmit={handleSubmit}
                   noValidate
-                  className="bg-white/[0.03] border border-white/8 rounded-2xl p-8 flex flex-col gap-5"
+                  style={{
+                    background: theme.bgCard,
+                    border: `1px solid ${theme.border}`,
+                  }}
+                  className="rounded-2xl p-8 flex flex-col gap-5"
                 >
-                  <h3 className="text-white font-bold text-xl pb-4 border-b border-white/8">
+                  <h3
+                    style={{
+                      color: theme.text,
+                      borderBottom: `1px solid ${theme.border}`,
+                    }}
+                    className="font-bold text-xl pb-4"
+                  >
                     Schedule Your Pickup
                   </h3>
-
                   {/* Name row */}
                   <div className="grid grid-cols-2 gap-4">
                     <Field
@@ -330,9 +342,17 @@ function Booking() {
                         onChange={handleChange}
                         placeholder="Kwame"
                         autoComplete="given-name"
-                        className={inputClass(errors.firstName)}
+                        className={inputClass(errors.firstName, theme)}
+                        style={{
+                          background: theme.inputBg,
+                          borderColor: errors.firstName
+                            ? "#EF444480"
+                            : theme.inputBorder,
+                          color: theme.text,
+                        }}
                       />
                     </Field>
+
                     <Field
                       label="Last Name"
                       icon={User}
@@ -344,7 +364,14 @@ function Booking() {
                         onChange={handleChange}
                         placeholder="Asante"
                         autoComplete="family-name"
-                        className={inputClass(errors.lastName)}
+                        className={inputClass(errors.lastName, theme)}
+                        style={{
+                          background: theme.inputBg,
+                          borderColor: errors.firstName
+                            ? "#EF444480"
+                            : theme.inputBorder,
+                          color: theme.text,
+                        }}
                       />
                     </Field>
                   </div>
@@ -358,7 +385,14 @@ function Booking() {
                       onChange={handleChange}
                       placeholder="you@example.com"
                       autoComplete="email"
-                      className={inputClass(errors.email)}
+                      className={inputClass(errors.email, theme)}
+                      style={{
+                        background: theme.inputBg,
+                        borderColor: errors.firstName
+                          ? "#EF444480"
+                          : theme.inputBorder,
+                        color: theme.text,
+                      }}
                     />
                   </Field>
 
@@ -371,7 +405,14 @@ function Booking() {
                       onChange={handleChange}
                       placeholder="+1 (555) 000-0000"
                       autoComplete="tel"
-                      className={inputClass(errors.phone)}
+                      className={inputClass(errors.phone, theme)}
+                      style={{
+                        background: theme.inputBg,
+                        borderColor: errors.firstName
+                          ? "#EF444480"
+                          : theme.inputBorder,
+                        color: theme.text,
+                      }}
                     />
                   </Field>
 
@@ -387,7 +428,14 @@ function Booking() {
                       onChange={handleChange}
                       placeholder="123 Main Street, Accra"
                       autoComplete="street-address"
-                      className={inputClass(errors.address)}
+                      className={inputClass(errors.address, theme)}
+                      style={{
+                        background: theme.inputBg,
+                        borderColor: errors.firstName
+                          ? "#EF444480"
+                          : theme.inputBorder,
+                        color: theme.text,
+                      }}
                     />
                   </Field>
 
@@ -422,7 +470,14 @@ function Booking() {
                         value={form.date}
                         onChange={handleChange}
                         min={today}
-                        className={inputClass(errors.date)}
+                        className={inputClass(errors.date, theme)}
+                        style={{
+                          background: theme.inputBg,
+                          borderColor: errors.firstName
+                            ? "#EF444480"
+                            : theme.inputBorder,
+                          color: theme.text,
+                        }}
                       />
                     </Field>
                   </div>
@@ -503,16 +558,22 @@ function Booking() {
 // Wraps every input with a label and error message.
 // Keeps the form JSX clean and consistent.
 function Field({ label, icon: Icon, error, children }) {
+  const { theme } = useTheme();
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-blue-100/50 text-xs font-semibold tracking-[0.12em] uppercase flex items-center gap-2">
-        {Icon && <Icon size={11} className="text-blue-400" />}
+      <label
+        className="text-xs font-semibold tracking-[0.12em] uppercase flex items-center gap-2"
+        style={{ color: theme.textMuted }}
+      >
+        {Icon && <Icon size={11} style={{ color: theme.primary }} />}
         {label}
       </label>
       {children}
-      {/* Only renders the error span when there's an error message */}
       {error && (
-        <span className="text-red-400 text-xs font-light flex items-center gap-1">
+        <span
+          className="text-xs font-light flex items-center gap-1"
+          style={{ color: theme.accent }}
+        >
           ⚠ {error}
         </span>
       )}
@@ -526,14 +587,14 @@ function Field({ label, icon: Icon, error, children }) {
 // Defined as a function so we call it: className={inputClass(errors.field)}
 function inputClass(error) {
   return `
-    w-full bg-white/5 border rounded-lg px-4 py-3
-    text-white text-sm font-light placeholder-blue-100/20
-    focus:outline-none focus:ring-0 transition-colors duration-200
-    [&>option]:bg-[#0E1628] [&>option]:text-white
+    w-full rounded-lg px-4 py-3
+    text-sm font-light
+    focus:outline-none transition-colors duration-200
+    [&>option]:text-black
     ${
       error
         ? "border-red-500/60 focus:border-red-400"
-        : "border-white/10 focus:border-blue-500/60 hover:border-white/20"
+        : "border focus:border-blue-500/60"
     }
   `;
 }
