@@ -9,11 +9,6 @@ const themePresets = [
     colors: ["#060B18", "#1D4ED8", "#DC2626"],
   },
   {
-    key: "light",
-    label: "Clean White",
-    colors: ["#F8FAFF", "#1D4ED8", "#DC2626"],
-  },
-  {
     key: "red",
     label: "Midnight Red",
     colors: ["#0D0608", "#DC2626", "#F59E0B"],
