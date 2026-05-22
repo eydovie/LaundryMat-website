@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Check, Zap, ArrowRight, Star } from "lucide-react";
+import { useTheme } from "../context/useTheme";
 
 const plans = [
   {
@@ -63,10 +64,12 @@ const plans = [
 ];
 
 function Pricing() {
+  const { theme } = useTheme();
   return (
     <section
       id="pricing"
-      className="relative bg-[#060B18] py-32 overflow-hidden"
+      className="relative py-32 overflow-hidden"
+      style={{ background: theme.bg }}
     >
       {/* ── Background ── */}
       <div
@@ -83,8 +86,8 @@ function Pricing() {
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none opacity-[0.02]"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(${theme.gridColor} 1px, transparent 1px),
+                    linear-gradient(90deg, ${theme.gridColor} 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
         }}
       />
@@ -106,9 +109,7 @@ function Pricing() {
             Transparent Plans,{" "}
             <span
               className="text-transparent bg-clip-text"
-              style={{
-                backgroundImage: "linear-gradient(135deg, #3B82F6, #DC2626)",
-              }}
+              style={{ backgroundImage: theme.gradientText }}
             >
               No Surprises
             </span>
@@ -157,25 +158,21 @@ function Pricing() {
 }
 
 // ── PricingCard component ──
-function PricingCard({ plan, index }) {
+function PricingCard({ plan }) {
+  const { theme } = useTheme();
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.15,
-        ease: [0.25, 0.46, 0.45, 0.94],
+      style={{
+        background: plan.featured ? `${theme.accent}15` : theme.bgCard,
+        border: `1px solid ${plan.featured ? theme.accent + "50" : theme.border}`,
       }}
-      // featured card scales up slightly to stand out
-      className={`relative flex flex-col rounded-2xl border p-8 transition-all duration-300
-        ${
-          plan.featured
-            ? "bg-gradient-to-b from-red-950/70 to-red-900/20 border-red-500/40 scale-105 shadow-[0_30px_80px_rgba(220,38,38,0.2)]"
-            : "bg-white/[0.03] border-white/8 hover:border-white/20 hover:bg-white/[0.05] hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)] hover:-translate-y-1"
-        }
-      `}
+      className={`relative flex flex-col rounded-2xl p-8 transition-all duration-300
+    ${
+      plan.featured
+        ? "scale-105 shadow-2xl"
+        : "hover:-translate-y-1 hover:shadow-xl"
+    }
+  `}
     >
       {/* Featured badge */}
       {plan.featured && (
@@ -188,9 +185,8 @@ function PricingCard({ plan, index }) {
       {/* Plan header */}
       <div className="mb-8">
         <p
-          className={`text-xs font-bold tracking-[0.2em] uppercase mb-4
-          ${plan.featured ? "text-red-400" : "text-blue-400"}
-        `}
+          style={{ color: plan.featured ? theme.accent : theme.primary }}
+          className="text-xs font-bold tracking-[0.2em] uppercase mb-4"
         >
           {plan.name}
         </p>
@@ -201,7 +197,10 @@ function PricingCard({ plan, index }) {
             <>
               {/* Only show $ sign when there's a numeric price */}
               <span className="text-white/40 text-2xl font-light mb-1">$</span>
-              <span className="text-6xl font-black text-white leading-none">
+              <span
+                style={{ color: theme.text }}
+                className="text-6xl font-black leading-none"
+              >
                 {plan.price}
               </span>
             </>
@@ -213,7 +212,10 @@ function PricingCard({ plan, index }) {
           )}
         </div>
 
-        <p className="text-blue-100/35 text-xs font-light mb-4">
+        <p
+          style={{ color: theme.textMuted }}
+          className="text-xs font-light mb-4"
+        >
           {plan.frequency}
         </p>
 
@@ -249,7 +251,10 @@ function PricingCard({ plan, index }) {
             >
               <Check size={11} strokeWidth={3} />
             </div>
-            <span className="text-blue-100/60 text-sm font-light leading-snug">
+            <span
+              style={{ color: theme.textSub }}
+              className="text-sm font-light leading-snug"
+            >
               {feature}
             </span>
           </li>

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Quote, Star } from "lucide-react";
+import { useTheme } from "../context/useTheme";
 
 const testimonials = [
   {
@@ -60,10 +61,12 @@ const testimonials = [
 ];
 
 function Testimonials() {
+  const { theme } = useTheme();
   return (
     <section
       id="testimonials"
-      className="relative bg-[#060B18] py-32 overflow-hidden"
+      className="relative py-32 overflow-hidden"
+      style={{ background: theme.bg }}
     >
       {/* ── Background ── */}
       <div
@@ -103,10 +106,8 @@ function Testimonials() {
             <h2 className="text-5xl lg:text-6xl font-black text-white leading-tight">
               Trusted by Thousands{" "}
               <span
-                className="text-transparent bg-clip-text block"
-                style={{
-                  backgroundImage: "linear-gradient(135deg, #3B82F6, #DC2626)",
-                }}
+                className="text-transparent bg-clip-text"
+                style={{ backgroundImage: theme.gradientText }}
               >
                 Across the City
               </span>
@@ -150,12 +151,9 @@ function Testimonials() {
         </div>
 
         {/* ── Bottom social proof bar ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 flex flex-wrap items-center justify-center gap-12 py-8 border-t border-white/5"
+        <div
+          className="mt-16 flex flex-wrap items-center justify-center gap-12 py-8"
+          style={{ borderTop: `1px solid ${theme.border}` }}
         >
           {[
             { num: "12,000+", label: "Happy Clients" },
@@ -177,34 +175,25 @@ function Testimonials() {
               </p>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 }
 
 // ── TestimonialCard component ──
-function TestimonialCard({ testimonial, index }) {
+function TestimonialCard({ testimonial }) {
   const isRed = testimonial.color === "red";
+  const { theme } = useTheme();
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.25, 0.46, 0.45, 0.94],
+      style={{
+        background: testimonial.featured ? `${theme.accent}10` : theme.bgCard,
+        border: `1px solid ${testimonial.featured ? theme.accent + "30" : theme.border}`,
+        color: theme.text,
       }}
-      className={`relative flex flex-col gap-5 p-7 rounded-2xl border transition-all duration-300
-        hover:-translate-y-1
-        ${
-          testimonial.featured
-            ? "bg-gradient-to-br from-red-950/60 to-blue-950/40 border-red-500/30 hover:border-red-400/50 hover:shadow-[0_20px_60px_rgba(220,38,38,0.15)]"
-            : "bg-white/[0.03] border-white/8 hover:bg-white/[0.06] hover:border-white/18 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
-        }
-      `}
+      className="relative flex flex-col gap-5 p-7 rounded-2xl transition-all duration-300 hover:-translate-y-1"
     >
       {/* Giant decorative quote mark — top right */}
       <Quote
@@ -228,7 +217,10 @@ function TestimonialCard({ testimonial, index }) {
       </div>
 
       {/* Quote text */}
-      <p className="text-blue-100/70 font-light leading-relaxed text-sm flex-1">
+      <p
+        style={{ color: theme.textSub }}
+        className="font-light leading-relaxed text-sm flex-1"
+      >
         "{testimonial.quote}"
       </p>
 
@@ -259,8 +251,10 @@ function TestimonialCard({ testimonial, index }) {
         </div>
 
         <div>
-          <p className="text-white font-semibold text-sm">{testimonial.name}</p>
-          <p className="text-blue-100/35 text-xs font-light">
+          <p style={{ color: theme.text }} className="font-semibold text-sm">
+            {testimonial.name}
+          </p>
+          <p style={{ color: theme.textMuted }} className="text-xs font-light">
             {testimonial.role}
           </p>
         </div>

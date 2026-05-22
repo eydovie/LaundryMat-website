@@ -6,6 +6,7 @@ import {
   BadgeCheck,
   ArrowRight,
 } from "lucide-react";
+import { useTheme } from "../context/useTheme";
 
 const steps = [
   {
@@ -43,10 +44,12 @@ const steps = [
 ];
 
 function HowItWorks() {
+  const { theme } = useTheme();
   return (
     <section
       id="how-it-works"
-      className="relative bg-[#060B18] py-32 overflow-hidden"
+      className="relative py-32 overflow-hidden"
+      style={{ background: theme.bg }}
     >
       {/* ── Background treatment ── */}
       <div
@@ -64,8 +67,8 @@ function HowItWorks() {
         aria-hidden="true"
         className="absolute inset-0 pointer-events-none opacity-[0.02]"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)`,
+          backgroundImage: `linear-gradient(${theme.gridColor} 1px, transparent 1px),
+                    linear-gradient(90deg, ${theme.gridColor} 1px, transparent 1px)`,
           backgroundSize: "60px 60px",
         }}
       />
@@ -88,9 +91,7 @@ function HowItWorks() {
               Effortless from{" "}
               <span
                 className="text-transparent bg-clip-text"
-                style={{
-                  backgroundImage: "linear-gradient(135deg, #3B82F6, #DC2626)",
-                }}
+                style={{ backgroundImage: theme.gradientText }}
               >
                 Start to Finish
               </span>
@@ -113,8 +114,7 @@ function HowItWorks() {
             aria-hidden="true"
             className="absolute top-[52px] left-[10%] right-[10%] h-px hidden lg:block"
             style={{
-              background:
-                "linear-gradient(90deg, rgba(29,78,216,0.3), rgba(220,38,38,0.3), rgba(29,78,216,0.3), rgba(220,38,38,0.3))",
+              background: `linear-gradient(90deg, ${theme.primary}40, ${theme.accent}40, ${theme.primary}40)`,
             }}
           />
 
@@ -147,20 +147,29 @@ function HowItWorks() {
               label: "Re-clean Guarantee",
               sub: "Not satisfied? We redo it, free of charge",
             },
-          ].map((item, i) => (
+          ].map((item) => (
             <motion.div
-              key={item.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.5 + i * 0.1 }}
-              className="flex items-start gap-4 bg-white/[0.03] border border-white/8 rounded-xl p-6 hover:bg-white/[0.06] hover:border-white/15 transition-all duration-300"
+              style={{
+                background: theme.bgCard,
+                border: `1px solid ${theme.border}`,
+              }}
+              className="flex items-start gap-4 rounded-xl p-6 transition-all duration-300"
             >
-              {/* Animated dot indicator */}
-              <div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0 animate-pulse" />
+              <div
+                className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0 animate-pulse"
+                style={{ background: theme.accent }}
+              />
               <div>
-                <p className="text-white font-semibold text-sm">{item.label}</p>
-                <p className="text-blue-100/40 text-xs font-light mt-1">
+                <p
+                  style={{ color: theme.text }}
+                  className="font-semibold text-sm"
+                >
+                  {item.label}
+                </p>
+                <p
+                  style={{ color: theme.textMuted }}
+                  className="text-xs font-light mt-1"
+                >
                   {item.sub}
                 </p>
               </div>
@@ -196,6 +205,7 @@ function HowItWorks() {
 function StepCard({ step, index }) {
   const Icon = step.icon;
   const isBlue = step.color === "blue";
+  const { theme } = useTheme();
 
   return (
     <motion.div
@@ -211,14 +221,12 @@ function StepCard({ step, index }) {
     >
       {/* Step number circle — sits ON the connecting line on desktop */}
       <div
-        className={`relative w-[104px] h-[104px] rounded-full flex items-center justify-center mb-8 z-10
-        border-2 transition-all duration-300 group-hover:scale-105
-        ${
-          isBlue
-            ? "bg-blue-950/80 border-blue-500/30 group-hover:border-blue-400/60 group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]"
-            : "bg-red-950/80  border-red-500/30  group-hover:border-red-400/60  group-hover:shadow-[0_0_30px_rgba(220,38,38,0.3)]"
-        }
-      `}
+        className="relative w-[104px] h-[104px] rounded-full flex items-center justify-center mb-8 z-10 border-2 transition-all duration-300 group-hover:scale-105"
+        style={{
+          background: theme.bgCard,
+          borderColor: isBlue ? `${theme.primary}50` : `${theme.accent}50`,
+          boxShadow: "none",
+        }}
       >
         {/* Big faded number behind the icon */}
         <span
@@ -251,9 +259,13 @@ function StepCard({ step, index }) {
         Step {step.number}
       </span>
 
-      <h3 className="text-white font-bold text-xl mb-3">{step.title}</h3>
-
-      <p className="text-blue-100/40 font-light leading-relaxed text-sm">
+      <h3 style={{ color: theme.text }} className="font-bold text-xl mb-3">
+        {step.title}
+      </h3>
+      <p
+        style={{ color: theme.textMuted }}
+        className="font-light leading-relaxed text-sm"
+      >
         {step.description}
       </p>
     </motion.div>
