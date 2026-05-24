@@ -16,6 +16,7 @@ import {
   Truck,
 } from "lucide-react";
 import { useTheme } from "../context/useTheme";
+import { submitBooking } from "../api/bookingApi";
 
 // Form fields defined as data — cleaner than repeating
 // JSX for every single input manually
@@ -74,6 +75,7 @@ function Booking() {
   // status: 'idle' | 'loading' | 'success'
   const [status, setStatus] = useState("idle");
   const { theme } = useTheme();
+  const [bookingRef, setBookingRef] = useState("");
 
   // Generic change handler — works for ALL inputs and selects.
   // e.target.name matches the name="" attribute on each field.
@@ -104,26 +106,56 @@ function Booking() {
   };
 
   const handleSubmit = async (e) => {
-    // Prevent the default browser page-reload on form submit
     e.preventDefault();
 
-    // Run validation
+    // Run frontend validation first
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
-      // If there are errors, store them in state and stop
       setErrors(validationErrors);
       return;
     }
 
-    // Show loading spinner
     setStatus("loading");
 
-    // Simulate an API call with a 2 second delay.
-    // In production you'd replace this with a real fetch() to your backend.
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Send form data to the backend
+      // The backend validates again, saves to MongoDB,
+      // and sends confirmation emails
+      const response = await submitBooking({
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        phone: form.phone,
+        address: form.address,
+        service: form.service,
+        date: form.date,
+        time: form.time,
+        notes: form.notes,
+      });
 
-    // Show success state
-    setStatus("success");
+      // Store the booking reference returned from the backend
+      // so we can show it in the success screen
+      setBookingRef(response.bookingRef);
+      setStatus("success");
+    } catch (error) {
+      // If the backend returns validation errors
+      if (error.response?.data?.errors) {
+        const serverErrors = {};
+        error.response.data.errors.forEach((err) => {
+          serverErrors[err.path] = err.msg;
+        });
+        setErrors(serverErrors);
+
+        // Any other error — network down, server crash etc
+      } else {
+        setErrors({
+          submit:
+            error.response?.data?.message ||
+            "Something went wrong. Please try again.",
+        });
+      }
+      setStatus("idle");
+    }
   };
 
   // Get today's date in YYYY-MM-DD format for the date input's min attribute
@@ -284,14 +316,44 @@ function Booking() {
                     <h3 className="text-white font-black text-3xl mb-3">
                       Booking Confirmed!
                     </h3>
-                    <p className="text-blue-100/50 font-light leading-relaxed">
+                    <p
+                      className="font-light leading-relaxed"
+                      style={{ color: theme.textMuted }}
+                    >
                       We've received your booking and will send a confirmation
                       to{" "}
-                      <span className="text-white font-medium">
+                      <span
+                        style={{ color: theme.text }}
+                        className="font-medium"
+                      >
                         {form.email}
                       </span>{" "}
-                      within minutes. Our courier will arrive right on time.
+                      within minutes.
                     </p>
+
+                    {/* Show the real booking reference from the backend */}
+                    {bookingRef && (
+                      <div
+                        className="px-6 py-3 rounded-xl text-center"
+                        style={{
+                          background: theme.bgCard,
+                          border: `1px solid ${theme.border}`,
+                        }}
+                      >
+                        <p
+                          style={{ color: theme.textMuted }}
+                          className="text-xs uppercase tracking-widest mb-1"
+                        >
+                          Your Booking Reference
+                        </p>
+                        <p
+                          style={{ color: theme.accent }}
+                          className="font-black text-2xl"
+                        >
+                          {bookingRef}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   <button
@@ -517,6 +579,20 @@ function Booking() {
                       className={`${inputClass(null)} resize-none`}
                     />
                   </Field>
+
+                  {/* Global form error — shows if the API call fails entirely */}
+                  {errors.submit && (
+                    <div
+                      className="px-4 py-3 rounded-lg text-sm font-light"
+                      style={{
+                        background: `${theme.accent}15`,
+                        border: `1px solid ${theme.accent}40`,
+                        color: theme.accent,
+                      }}
+                    >
+                      ⚠ {errors.submit}
+                    </div>
+                  )}
 
                   {/* Submit button */}
                   <button
