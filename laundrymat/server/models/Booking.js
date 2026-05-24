@@ -76,14 +76,13 @@ const bookingSchema = new mongoose.Schema(
 
 // Pre-save hook — runs automatically BEFORE a booking is saved.
 // Generates a unique booking reference like "LM-4821"
-bookingSchema.pre("save", function (next) {
+bookingSchema.pre("save", function () {
   if (!this.bookingRef) {
     // Math.random generates a number, toString(36) converts to
     // base-36 (letters + numbers), slice gets last 5 characters
     this.bookingRef =
       "LM-" + Math.random().toString(36).slice(-5).toUpperCase();
   }
-  next();
 });
 
 // mongoose.model() creates the model from the schema.
