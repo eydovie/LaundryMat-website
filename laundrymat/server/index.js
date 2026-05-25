@@ -32,7 +32,12 @@ app.use(helmet());
 app.use(morgan("dev"));
 
 // cors allows our React frontend (port 5173) to call this API
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(
+  cors({
+    origin: ["http://localhost:5173", process.env.CLIENT_URL],
+    credentials: true,
+  }),
+);
 
 // express.json() parses incoming JSON request bodies
 // Without this, req.body would be undefined
